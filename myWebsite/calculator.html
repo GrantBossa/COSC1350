@@ -52,7 +52,23 @@ Note: you will be writing the JavaScript code for your midterm. You only need to
                 <!-- Use the main area to add the main content of the webpage -->
                 <main>
 
-                        <p>Main content</p>
+                        
+                        <form>
+                           <p>Tip Calculator</p>
+                           <label for="billAmount">Please enter your Bill Amount</label>
+                           <input type=“text” name=“billAmount” id=“billAmount”>
+                          <label for="tipPercentage">Please Select Your Service Quality / Tip Amount</label>
+
+                          <select name="tipPercentage">
+                             <option>Excellent (25%)</option>
+                             <option>Good (20%)</option>
+                             <option>Fair (15%)</option>
+                             <option>Poor (10%)</option>
+                             <input type="submit" value="Calculate Tip">
+                           <label for="tipAmount">Your tip amount will be:</label>
+                           <input type=“text” name=“tipAmount” id=“tipAmount”>
+                             
+                        </form>
 
                 </main>
 
