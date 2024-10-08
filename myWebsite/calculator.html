@@ -1,82 +1,141 @@
 <!DOCTYPE html>
 
 <!--
-        Student Name:  Grant Bossa
-        File Name: calculator.html
-        Date: October 3, 2024
-Using your template.html, either copy or do a save as calculator.html. Don't forget to update your navigation bar with the new webpage (on all pages). You will need input controls (and associated labels) for the bill amount and for the service quality (tip percentage). The service quality input control will be a drop-down menu with the following options:
+   Student Name:  Grant Bossa
+   File Name: calculator.html
+   Date: October 3, 2024
+   Using your template.html, either copy or do a save as calculator.html. 
+   Don't forget to update your navigation bar with the new webpage (on all pages). 
+   You will need input controls (and associated labels) for the bill amount and 
+   for the service quality (tip percentage). The service quality input control will 
+   be a drop-down menu with the following options:
 
-Excellent (25%)
-Good (20%)
-Fair (15%)
-Poor (10%)
-You will also need a button that will be used to calculate the tip (will tie to the js code you will be creating for your midterm). Your form should look something like the following (as far as functionality goes...you can make it as pretty as you want):
+   Excellent (25%)
+   Good (20%)
+   Fair (15%)
+   Poor (10%)
+   You will also need a button that will be used to calculate the tip 
+   (will tie to the js code you will be creating for your midterm). 
+   Your form should look something like the following 
+   (as far as functionality goes...you can make it as pretty as you want):
 
-Tip calculator form
+   Tip calculator form
 
-Store the input as a variable, and print to the console to make sure you are successfully handling input. Don't forget to update your navigation bar with the new webpage (on all pages).
+   Store the input as a variable, and print to the console to make sure you are 
+   successfully handling input. Don't forget to update your navigation bar with the 
+   new webpage (on all pages).
 
-When ready, upload your local files to your COSC1350 GitHub Repository and commit your changes. Submit the link to your GitHub Repository. This is how I will know that you are ready for me to grade your assignment.
+   When ready, upload your local files to your COSC1350 GitHub Repository and 
+   commit your changes. Submit the link to your GitHub Repository. 
+   This is how I will know that you are ready for me to grade your assignment.
 
-Note: you will be writing the JavaScript code for your midterm. You only need to create the form and styling for this assignment. In other words, add the html components and make it pretty.
+   Note: you will be writing the JavaScript code for your midterm. 
+   You only need to create the form and styling for this assignment. 
+   In other words, add the html components and make it pretty.
  -->
 
 <html lang="en">
-        <head>
-                <title>Tip Calculator</title>
-                <meta charset="utf-8">
-                <link rel="stylesheet" href="css/styles.css">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link href="https://fonts.googleapis.com/css?family=Coustard:900&display=swap" rel="stylesheet">
-        </head>
 
-        <body>
+<head>
+	<title>Tip Calculator</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/styles.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css?family=Coustard:900&display=swap" rel="stylesheet">
+</head>
 
-                <!-- Use the header area for the website name or logo. The header contains static content. -->
-                <header>
-                        <h1>Grant Bossa</h1>
-                        <img src="images/grantbossa.png" alt="Grant Bossa" class="center" >
-                        <h3 class="round">Aspiring Software Developer</h3>
-                </header>
+<body>
+	<!-- Use the header area for the website name or logo. The header contains static content. -->
+	<header>
+		<h1>Grant Bossa</h1>
+		<img src="images/grantbossa.png" alt="Grant Bossa" class="center">
+		<h3 class="round">Aspiring Software Developer</h3>
+	</header>
 
-                <!-- Use the nav area to add hyperlinks to other pages within the website. It contains static content. -->
-                <nav>
-                        <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about.html">About Me</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-    <li><a hfef="calculator.html">Tip Calculator</a></li>
-                        </ul>
-                </nav>
+	<!-- Use the nav area to add hyperlinks to other pages within the website. It contains static content. -->
+	<nav>
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="about.html">About Me</a></li>
+			<li><a href="contact.html">Contact</a></li>
+			<li><a href="calculator.html">Tip Calculator</a></li>
+		</ul>
+	</nav>
 
-                <!-- Use the main area to add the main content of the webpage -->
-                <main>
+	<!-- Use the main area to add the main content of the webpage -->
+	<main>
 
-                        
-                        <form>
-                           <p>Tip Calculator</p>
-                           <label for="billAmount">Please enter your Bill Amount</label>
-                           <input type=“text” name=“billAmount” id=“billAmount”>
-                          <label for="tipPercentage">Please Select Your Service Quality / Tip Amount</label>
+		<form id="tipCalc" action="mailto:grantbossa@westernwyoming.edu" method="POST">
+			<script>
+				function myFunction() {
+					
+					// calc tip amount 
+					// calc total amount
+					var x = document.getElementById("billAmount").value;
+					
+					// test billAmount to be greater than zero, else msg'Enter Bill Amount'
+					if ( x <= 0 || null ){
+						alert("Please enter a Bill Amount")
+					} else {
+					
+					var y = document.getElementById("tipPercentage").value
+					
+					if (y.includes("25%")) {
+						z= (x*.25)
+					} else if (y.includes("20%")) {
+						z= (x*.2)
+					} else if (y.includes("15%")) {
+						z= (x*.15)
+					} else if (y.includes("10%")) {
+						z= (x*.10)
+					}
+					
+					document.getElementById("tipAmount").innerHTML= z
+					
+					ta=0
+					ta=(x*1)+(z*1)
+					
+					document.getElementById("totalAmount").innerHTML= ta
+					
+					alert ("billAmount = " + x +"\ntipPercentage = " + y+"\ntipAmount = " + document.getElementById("tipAmount").innerHTML + "\ntotalAmount = " + document.getElementById("totalAmount").innerHTML)
+}
+					
+				}
+			</script>
+			<h1>Tip Calculator</h1>
+			<p></p>
 
-                          <select name="tipPercentage">
-                             <option>Excellent (25%)</option>
-                             <option>Good (20%)</option>
-                             <option>Fair (15%)</option>
-                             <option>Poor (10%)</option>
-                             <input type="submit" value="Calculate Tip">
-                           <label for="tipAmount">Your tip amount will be:</label>
-                           <input type=“text” name=“tipAmount” id=“tipAmount”>
-                             
-                        </form>
+			<label for="billAmount">Please enter your Bill Amount</label><br>
+			<input type="text" name="billAmount" id="billAmount" placeholder="Enter Bill Amount Here"
+				onchange="myFunction()">
+			<br>
+			<label for="tipPercentage">Please Select Your Service Quality / Tip Amount</label>
+			<br>
+			<select name="tipPercentage" id="tipPercentage"  >
+				<option>Excellent (25%)</option>
+				<option>Good (20%)</option>
+				<option>Fair (15%)</option>
+				<option>Poor (10%)</option>
+			</select>
+			<br>
+			<br>
+			<input type="submit" value="Calculate Tip" >
+			<p>Tip Amount:</p>
+			<p id='tipAmount'></p>
+			<p>Total Bill:</p>
+			<P id='totalAmount'></p>
+			
+			<!-- debugging <button onclick="alert('bill amount', document.getElementById('billAmount'))">alert</button> -->
+			<!-- debugging <button onclick="myFunction()">myFunction</button> -->
 
-                </main>
+		</form>
+	</main>
 
-                <!-- Use the footer area to add static footer content, such as email and copyright info. -->
-                <footer>
-                        <p>&copy; Copyright 2024. All Rights Reserved.</p>
-                        <p><a href=mailto:grantbossa@westernwyoming.edu>grantbossa@westernwyoming.edu</a></p>
-                </footer>
+	<!-- Use the footer area to add static footer content, such as email and copyright info. -->
+	<footer>
+		<p>&copy; Copyright 2024. All Rights Reserved.</p>
+		<p><a href=mailto:grantbossa@westernwyoming.edu>grantbossa@westernwyoming.edu</a></p>
+	</footer>
+</body>
 
-        </body>
 </html>
