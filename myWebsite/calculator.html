@@ -65,69 +65,30 @@
 	<!-- Use the main area to add the main content of the webpage -->
 	<main>
 
-		<form id="tipCalc" action="mailto:grantbossa@westernwyoming.edu" method="POST">
-			<script>
-				function myFunction() {
-					
-					// calc tip amount 
-					// calc total amount
-					var x = document.getElementById("billAmount").value;
-					
-					// test billAmount to be greater than zero, else msg'Enter Bill Amount'
-					if ( x <= 0 || null ){
-						alert("Please enter a Bill Amount")
-					} else {
-					
-					var y = document.getElementById("tipPercentage").value
-					
-					if (y.includes("25%")) {
-						z= (x*.25)
-					} else if (y.includes("20%")) {
-						z= (x*.2)
-					} else if (y.includes("15%")) {
-						z= (x*.15)
-					} else if (y.includes("10%")) {
-						z= (x*.10)
-					}
-					
-					document.getElementById("tipAmount").innerHTML= z
-					
-					ta=0
-					ta=(x*1)+(z*1)
-					
-					document.getElementById("totalAmount").innerHTML= ta
-					
-					alert ("billAmount = " + x +"\ntipPercentage = " + y+"\ntipAmount = " + document.getElementById("tipAmount").innerHTML + "\ntotalAmount = " + document.getElementById("totalAmount").innerHTML)
-}
-					
-				}
-			</script>
+		<form id="tipCalcForm" action="mailto:grantbossa@westernwyoming.edu" method="POST">
+			<script type="text/javascript" src="js/tipCalc.js"></script>
+			
 			<h1>Tip Calculator</h1>
 			<p></p>
-
-			<label for="billAmount">Please enter your Bill Amount</label><br>
-			<input type="text" name="billAmount" id="billAmount" placeholder="Enter Bill Amount Here"
-				onchange="myFunction()">
-			<br>
-			<label for="tipPercentage">Please Select Your Service Quality / Tip Amount</label>
-			<br>
-			<select name="tipPercentage" id="tipPercentage"  >
-				<option>Excellent (25%)</option>
-				<option>Good (20%)</option>
-				<option>Fair (15%)</option>
-				<option>Poor (10%)</option>
-			</select>
-			<br>
-			<br>
-			<input type="submit" value="Calculate Tip" >
-			<p>Tip Amount:</p>
-			<p id='tipAmount'></p>
-			<p>Total Bill:</p>
-			<P id='totalAmount'></p>
-			
-			<!-- debugging <button onclick="alert('bill amount', document.getElementById('billAmount'))">alert</button> -->
-			<!-- debugging <button onclick="myFunction()">myFunction</button> -->
-
+			<div>
+				<label for="billAmount">Bill Amount:</label><br>
+				<input type="text" name="billAmount" id="billAmount" placeholder="Enter Bill Amount Here">
+				<p></p>
+				<label for="tipPercentage">Service Quality:</label>
+				<br>
+				<select name="tipPercentage" id="tipPercentage"  >
+					<option>Excellent (25%)</option>
+					<option>Good (20%)</option>
+					<option>Fair (15%)</option>
+					<option>Poor (10%)</option>
+				</select>
+				<p></p>
+				<input type="submit" value="Calculate Tip" id="btnCalcTip" onclick="calculateTip()" >
+				<p></p>
+			</div>
+			<div id="divTotals" display="inline-block" >
+				<span>Tip Amount: $<var id='tipAmount'></var> | Total Bill: $<var id='totalAmount'></var></span>
+			</div>
 		</form>
 	</main>
 
