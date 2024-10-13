@@ -1,7 +1,8 @@
 /*
 Author: Grant Bossa
-Date: September 14, 2024
 File Name: styles.css
+Date Created: September 14, 2024
+Last Modified: October 12, 2024
 */
 
 /* CSS Reset */
@@ -112,17 +113,30 @@ main p {
    height: 50%;
 }
 
+/* about.html */
 #about {
    font-size: 1.25em;
    /* Changed to increase font display */
 }
 
+/* contact.html */
 #contact {
    text-align: center;
    line-height: 2em;
    /* Changed to space the lines apart */
 }
 
+/* contact.html */
+#gpsForWWCC {
+width="600"
+height="450"
+style="border:0;" 
+allowfullscreen="" 
+loading="lazy"
+referrerpolicy="no-referrer-when-downgrade"
+}
+
+/* calculator.html */
 #tipCalcForm {
    text-align: left;
    border: 6px solid #3712ef;
@@ -130,16 +144,32 @@ main p {
    padding: 5px;
    width: 50%;
    height: 50%;
+   font-size: 1.25em;
 }
 
+/* calculator.html */
+#billAmount {
+   text-align: left;
+   width: 50%;
+   padding: 0px 2px;
+   margin: 8px 10;
+   display: inline-block;
+   border: 1px solid #ccc;
+   box-sizing: border-box;
+   font-size: 1.25em;
+}
+
+/* calculator.html */
 #tipPercentage {
    text-align: left;
    margin-left: 0%;
    padding: 1px;
    width: 40%;
    height: 125%;
+   font-size: 1.25em;
 }
 
+/* calculator.html */
 #btnCalcTip {
    text-align: center;
    border: 6px solid #0a0a0a;
@@ -148,23 +178,17 @@ main p {
    margin-left: 25%;
    width: 40%;
    height: 75%;
+   font-size: 1.25em;
 }
 
+/* calculator.html */
 #tipAmount, #totalAmount {
    font-weight: bold;
    font-style: normal;
+   font-size: 1.25em;
 }
 
-/* Full-width inputs */
-input[type=text] {
-   text-align: left;
-   width: 50%;
-   padding: 0px 2px;
-   margin: 8px 10;
-   display: inline-block;
-   border: 1px solid #ccc;
-   box-sizing: border-box;
- }
+
 
 .tel-link {
    background-color: #132913;
