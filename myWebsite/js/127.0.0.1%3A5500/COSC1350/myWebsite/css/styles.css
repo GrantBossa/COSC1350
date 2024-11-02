@@ -69,7 +69,7 @@ header h3 {
 
 /* Style rules for navigation area */
 nav {
-   background-color: #1a1a8c;
+   background-color: #132913;
 }
 
 nav ul {
@@ -147,21 +147,20 @@ referrerpolicy="no-referrer-when-downgrade"
    height: 50%;
    font-size: 1.25em;
 }
-
 /* guessing.html */
 #guessingGameForm {
    text-align: center;
-   background-color: #7ebaeb; 
    border: 6px solid #3712ef;
-   margin-left: 10%;
+   margin-left: 25%;
    padding: 5px;
-   width: 70%;
+   width: 50%;
    height: 50%;
    font-size: 1.25em;
+   background-blend-mode: color;
 }
 
-/* calculator.html */
-#billAmount {
+/* calculator.html, guessing.html */
+#billAmount, #inputGuess {
    text-align: left;
    width: 50%;
    padding: 0px 2px;
@@ -172,17 +171,6 @@ referrerpolicy="no-referrer-when-downgrade"
    font-size: 1.25em;
 }
 
-/* guessing.html */
-#inputGuess {
-   text-align: left;
-   width: 25%;
-   padding: 0px 2px;
-   margin: 8px 10;
-   display: inline-block;
-   border: 1px solid #ccc;
-   box-sizing: border-box;
-   font-size: 1.25em;
-}
 /* calculator.html */
 #tipPercentage {
    text-align: left;
@@ -206,18 +194,12 @@ referrerpolicy="no-referrer-when-downgrade"
 }
 
 /* calculator.html */
-#tipAmount, #totalAmount {
+#tipAmount, #totalAmount, #displayGuesses {
    font-weight: bold;
    font-style: normal;
    font-size: 1.25em;
 }
 
-/* guessing.html */
-#displayGuesses {
-   font-weight: normal;
-   font-style: normal;
-   font-size: 1.0em;
-}
 
 
 .tel-link {

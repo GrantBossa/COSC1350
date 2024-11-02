@@ -2,22 +2,24 @@
 
 <!--
 	Student Name:  Grant Bossa
-   	File Name: calculator.html
-   	Date Created: October 3, 2024
-	Modified: October 30, 2024, added Guessing Game.html
--->
+	File Name: guessing.html
+	Date Created: October 30, 2024
+	Modified: 
+ -->
 
 <html lang="en">
 
 <head>
 	<meta charset="utf-8">
-	<title>Tip Calculator</title>
+	<title>Guessing Game</title>
 	<link rel="stylesheet" href="css/styles.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://fonts.googleapis.com/css?family=Coustard:900&amp;display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Ultra&amp;display=swap" rel="stylesheet">
+	<script type="text/javascript" src="js/guessingGame.js" defer></script>
 </head>
 
 <body>
+
 	<!-- Use the header area for the website name or logo. The header contains static content. -->
 	<header>
 		<h1>Grant Bossa</h1>
@@ -38,30 +40,22 @@
 
 	<!-- Use the main area to add the main content of the webpage -->
 	<main>
-
-		<form id="tipCalcForm" onsubmit="calculateTip(); return false;">
-			<script type="text/javascript" src="js/tipCalc.js"></script>
-			
-			<h1>Tip Calculator</h1>
+		<form id="guessingGameForm" >
+			<h1>Number Guessing Game</h1>
+			<h4>We have selected a random number between 1 and 100.<br>
+			See if you can guess in 10 turns or fewer. We'll tell you if your guess was too high or too low.</h4>
 			<p></p>
-			<div>
-				<label for="billAmount">Bill Amount:</label><br>
-				<input type="text" name="billAmount" id="billAmount" placeholder="Enter Bill Amount Here" required>
-				<p></p>
-				<label for="tipPercentage">Service Quality:</label>
-				<br>
-				<select name="tipPercentage" id="tipPercentage"  >
-					<option>Excellent (25%)</option>
-					<option>Good (20%)</option>
-					<option>Fair (15%)</option>
-					<option>Poor (10%)</option>
-				</select>
-				<p></p>
-				<input type="submit" value="Calculate Tip" id="btnCalcTip" onclick="calculateTip()" >
+			
+			<div display="block">
+				<span><label for="inputGuess">Enter a guess:</label>
+					<input type="text" name="inputGuess" id="inputGuess" placeholder="Guess Here" autofocus>
+					<input type="button" value="Submit Guess" id="btnSubmitGuess" placeholder="Submit Guess" onclick="processGuess()" >
+				</span>
 				<p></p>
 			</div>
-			<div id="divTotals" display="inline-block" >
-				<span>Tip Amount: $<var id='tipAmount'></var> | Total Bill: $<var id='totalAmount'></var></span>
+			<div id="displayGuesses" display="inline-block" >
+				<span>Guesses Made : <var id="guessCount"></span> of <var id="guessLimit"></var><br>
+				<span>Previous Guesses: <var id='guessPrevious'></var></span>
 			</div>
 		</form>
 	</main>
@@ -71,6 +65,7 @@
 		<p>&copy; Copyright 2024. All Rights Reserved.</p>
 		<p><a href=mailto:grantbossa@westernwyoming.edu>grantbossa@westernwyoming.edu</a></p>
 	</footer>
+
 </body>
 
 </html>

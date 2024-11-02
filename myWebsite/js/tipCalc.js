@@ -2,7 +2,6 @@
 //	Student Name:  Grant Bossa
 //	File Name: tipCalc.js
 //	Date Created: Oct 12, 2024
-//	Last Modified: October 12, 2024
 //
  function calculateTip() {
     // CONSTANTS
