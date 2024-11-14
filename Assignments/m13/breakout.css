@@ -1,6 +1,6 @@
 /*
-Author: 
-Date: 
+Grant Bossa
+November 13, 2024
 File Name: breakout.css
 */
 
@@ -30,4 +30,30 @@ Tip: I like to style my homework assignments to match my text editor's theme.
 
 canvas {
     border-style: solid;
+
 }
+
+/* Style rules for header content */
+header {
+    text-align: center;
+    color: #364a36;
+    background-color: #1aa3ff;
+ }
+ 
+ header h1 {
+    font-family: 'Coustard', serif;
+    padding: 2%;
+ }
+ 
+/* Style rule for body and images */
+body {
+    background-color: #4892d7;
+ }
+body.div {
+    text-align: center
+ }
+ #myCanvas {
+    border-style: solid;
+    box-shadow: 5px 5px 5px 5px #333;
+    background-color: #e2eae2;
+ }

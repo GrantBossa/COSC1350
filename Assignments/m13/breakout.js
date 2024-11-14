@@ -1,8 +1,8 @@
 /* ..:: B R E A K O U T   G A M E ::..
  *
  * breakout.js
- * Author:
- * Date:
+ * Grant Bossa
+ * November 13, 2024
  * Project for COSC 1350
  *
  */
@@ -15,24 +15,59 @@ const canvas = document.getElementById("myCanvas");
  *  You don't have to understand everything about canvas rendering contexts,
  *  but it help you get to know what the ctx object can and can't draw.
  */
-
 const ctx = canvas.getContext("2d");
 
+
+
+
 //drawing a ball requires the x position, y position, and radius
-let ballRadius = 15, xPos = canvas.width / 2, yPos = canvas.height / 2;
+let ball_Radius = 15, ball_xPos = canvas.width / 2, ball_yPos = canvas.height / 2;
+
+//drawing a paddle requires the x position, y position
+let paddle_xPos = canvas.width / 2, paddle_yPos = canvas.height-20; paddle_height = 15, paddle_width = 100
 
 //xy move distance. These values are used to move the ball around.
-let xMoveDist = 3, yMoveDist = 3;
+let ball_xMoveDist = 3, ball_yMoveDist = 3;
+
+//x move distance. These values are used to move the paddle around.
+let paddle_xMoveDist = 3, paddle_moveLeft = false, paddle_moveRight = true;
+
+
+
+
+// Add keydown and keyup event listeners to the DOM
+document.addEventListener('keydown', function(event) {
+  // Handle keydown event
+  console.log('Keydown:', event.key);
+  paddle_moveLeft = true;
+  paddle_moveRight = false;
+});
+
+document.addEventListener('keyup', function(event) {
+  // Handle keyup event
+  console.log('Keyup:', event.key);
+  paddle_moveLeft = false;
+  paddle_moveRight = true;
+});
 
 //function that draws the ball on the canvas
-ballRender=()=>{
+ball_Render=()=>{
+  
   ctx.beginPath();
   //arc creates circular arc starting at 0, ending at 2pi (360 degrees)
-  ctx.arc(xPos, yPos, ballRadius, 0, Math.PI * 2);
+  ctx.arc(ball_xPos, ball_yPos, ball_Radius, 0, Math.PI * 2);
   //fill in the circular path with default color
+
   ctx.fill();
   ctx.closePath();
 }
+
+//function that draws the paddle on the canvas
+paddle_Render=()=>{
+  ctx.fillstyle = "red";
+  ctx.fillRect(paddle_xPos, paddle_yPos, paddle_width, paddle_height);
+}
+
 
 /*
 * draw() can be thought of as our main function.
@@ -41,17 +76,38 @@ ballRender=()=>{
 * the first thing done is ctx.clearRect(), which clears the whole canvas
 * before drawing the next frame of animation.
 *
-* Right now, it only calls ballRender() over and over again.
-* Changing the xPos and yPos will cause the ball to be drawn somewhere else
+* Right now, it only calls ball_Render() over and over again.
+* Changing the ball_xPos and ball_yPos will cause the ball to be drawn somewhere else
 * next time the function is called.
 */
 draw=()=> {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ballRender();
 
-  //uncomment when you're ready to send the ball flying!
-  // xPos += xMoveDist;
-  // yPos += yMoveDist;
+  ball_Render();
+  paddle_Render();
+
+  // compare ball to boundaries of canvas
+  if((ball_xPos > canvas.width - ball_Radius) || (ball_xPos <=0 + ball_Radius)) ball_xMoveDist = -ball_xMoveDist;
+  if((ball_yPos > canvas.height - ball_Radius) || (ball_yPos <= 0 + ball_Radius)) ball_yMoveDist = -ball_yMoveDist;
+
+  // send the ball flying!
+  ball_xPos += ball_xMoveDist;
+  ball_yPos += ball_yMoveDist;
+
+   // compare paddle to boundaries of canvas
+  if(paddle_xPos >= canvas.width - paddle_width) {
+    // paddle_moveLeft = true 
+    paddle_moveRight = false
+  }
+  if (paddle_xPos <= 0) {
+    //paddle_moveRight = true 
+    paddle_moveLeft = false;
+  }
+  if (paddle_moveRight)
+    paddle_xPos += paddle_xMoveDist;
+  if (paddle_moveLeft) 
+    paddle_xPos += -paddle_xMoveDist;
+  
 };
 
 /*
