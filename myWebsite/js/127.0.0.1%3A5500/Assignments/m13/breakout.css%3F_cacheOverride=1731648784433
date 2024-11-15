@@ -5,7 +5,7 @@ File Name: breakout.css
 */
 
 /* CSS Reset */
-body, 
+body,
 header,
 nav,
 main,
@@ -60,7 +60,7 @@ body {
 
 #myCanvas {
 	border-style: solid;
-	border-color: blue;
-	box-shadow: 5px 5px 5px 5px #0a148a;
-	background-color: #e2eae2;
+	border-color = #1aa3ff;
+	box-shadow: 5px 5px 5px 5px #2b2d8d;
+	background-color: #e9f3e9;
 }
