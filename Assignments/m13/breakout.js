@@ -24,22 +24,34 @@ let paddle_xPos = canvas.width / 2, paddle_yPos = canvas.height-20; paddle_heigh
 let ball_xMoveDist = 3, ball_yMoveDist = 3;
 
 // Paddle move distances, x only as the paddle y position doesnt change  move distance. 
-let paddle_xMoveDist = 3, paddle_moveLeft = false, paddle_moveRight = true;
+let paddle_xMoveDist = 3, paddle_moveLeft = false, paddle_moveRight = false;
 
 // Add keydown event listener to the DOM
 document.addEventListener('keydown', function(event) {
-   // Report keydown to log. Set moveLeft to true when key is down
-   console.log('Keydown:', event.key);
-   paddle_moveLeft = true;
-   paddle_moveRight = false;
+   // Report keydown to log.
+   
+   console.log('keydown:', event.key);
+   // Set moveLeft, moveRight to true when the respective key is down
+   if (event.key === 'ArrowLeft') {
+      paddle_moveLeft = true;
+   }
+   if (event.key === 'ArrowRight') {
+      paddle_moveRight = true;
+   }
 });
 
-// Add keyup event listener to the DOM
+// Add keydown event listener to the DOM
 document.addEventListener('keyup', function(event) {
-  // Report keyup to log. Set moveRight to true when key is down
-  console.log('Keyup:', event.key);
-  paddle_moveLeft = false;
-  paddle_moveRight = true;
+   // Report keydown to log.
+   console.log('keyup:', event.key);
+   
+   // Set moveLeft, moveRight to fakse when the respective key is up
+   if (event.key === 'ArrowLeft') {
+      paddle_moveLeft = false;
+   }
+   if (event.key === 'ArrowRight') {
+      paddle_moveRight = false;
+   }
 });
 
 // Draws the ball on the canvas
@@ -49,7 +61,7 @@ ball_Render=()=>{
    //arc creates circular arc starting at 0, ending at 2pi (360 degrees)
    ctx.arc(ball_xPos, ball_yPos, ball_Radius, 0, Math.PI * 2);
    //fill in the circular path with color
-   ctx.fillstyle = ballColor
+   ctx.fillStyle = ballColor
    ctx.fill();
    ctx.closePath();
 }

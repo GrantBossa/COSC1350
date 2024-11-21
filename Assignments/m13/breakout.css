@@ -59,7 +59,8 @@ body {
 }
 
 #myCanvas {
-	border-style: solid;
+	/*border-style: solid;*/
+	border: 5px ridge blue;
 	border-color: blue;
 	box-shadow: 5px 5px 5px 5px #0a148a;
 	background-color: #e2eae2;
