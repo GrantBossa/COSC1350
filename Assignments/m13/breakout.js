@@ -72,7 +72,7 @@ class Ball {
    }
 }
 
-class Block {
+class Brick {
    constructor(x, y, width, height, color) {
       this.x = x;
       this.y = y;
@@ -110,17 +110,17 @@ class Block {
 }
 
 class Paddle {
-   constructor(x, y, width, height, speed) {
+   constructor(x, y, width, height, xMoveDist) {
       this.x = x;
       this.y = y;
       this.width = width;
       this.height = height;
-      this.speed = speed;
+      this.xMoveDist = xMoveDist;
    }
  
    // Method to move the paddle left
    moveLeft() {
-      this.x -= this.speed;
+      this.x -= this.xMoveDist;
       // Prevent paddle from going off the left edge of the canvas
       if (this.x < 0) {
          this.x = 0;
@@ -129,7 +129,7 @@ class Paddle {
  
    // Method to move the paddle right
    moveRight() {
-      this.x += this.speed;
+      this.x += this.xMoveDist;
       // Prevent paddle from going off the right edge of the canvas
       if (this.x + this.width > canvas.width) {
          this.x = canvas.width - this.width;
@@ -178,22 +178,22 @@ brickTopOffset = 40
 brickLeftOffset = 5
 brickCountLeft = brickRows * brickColumns
 
-// Create an array of blocks
-let blocks = [];
+// Create an array of bricks
+let bricks = [];
 for (let c = 0; c < brickColumns; c++) {
-   blocks[c] = [];
+   bricks[c] = [];
    for (let r = 0; r < brickRows; r++) {
-      blocks[c][r] = new Block(c * (brickWidth + brickPadding) + brickLeftOffset,
+      bricks[c][r] = new Brick(c * (brickWidth + brickPadding) + brickLeftOffset,
                               r * (brickHeight + brickPadding) + brickTopOffset,
                               brickWidth, brickHeight, randomColor());
    }
 }
 
-// Draw the blocks
-function drawBlocks() {
+// Draw the bricks
+function drawBricks() {
    for (let c = 0; c < brickColumns; c++) {
       for (let r = 0; r < brickRows; r++) {
-         blocks[c][r].draw();
+         bricks[c][r].draw();
       }
    }
 }
@@ -292,7 +292,7 @@ draw=()=> {
    ball.draw();
 // Temp paddle_Render();  // Render Paddle
    paddle.draw();
-   drawBlocks();
+   drawBricks();
 
 
    ball.updateLoc();
