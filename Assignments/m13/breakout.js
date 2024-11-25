@@ -5,318 +5,276 @@
  * November 13, 2024
  * 24/FA COSC 1350 NT
  *
- * I started this with just using a drawing canvas and variables for drawing the ball and paddle.
- * I spoke with Mr. Depoyster about trying to do it with classes.
- * 
- * I ended up with a bunch of code that is combined at the moment.
- * There is code for the classes and code for the variables.
- * I will clean this up once I have finished the rest of the homework 
- * for my other classes. 
- * 
- * I am submitting this as a complete program as it does work,
- * I am just not happy with the combined code. I will clean it up over 
- * Thanksgiving break.
- */
+*/
 
+const canvas = document.getElementById("myCanvas");         // get the canvas element from the DOM.
+const ctx = canvas.getContext("2d");                        // create a "2d rendering context".
+const resetBtn = document.getElementById("btnReset");       // Reset button for game
 
-let gameOver = false;
-// get the canvas element from the DOM.
-const canvas = document.getElementById("myCanvas");
+let gameOver = false;   // Indicator for end of game processing
+yourScore = 0;          // Keep track of score
+yourLevel = 1;          // Keep track of level
 
-//  create a "2d rendering context".
-const ctx = canvas.getContext("2d");
+// Add reset button event listener to the DOM
+resetBtn.addEventListener("click", handleClick);
 
-class Ball {
-   constructor(x, y, radius, dx, dy) {
-      this.x = x;
-      this.y = y;
-      this.radius = radius;
-      this.dx = dx; //  Change in x direction
-      this.dy = dy; // Change in y direction
-      this.isHit = false;
+// Add keydown event listener to the DOM
+document.addEventListener('keydown', function(event) {
+   // execute paddle moveLeft & moveRight functions when the respective key is down
+   if (event.key === 'ArrowLeft') {
+      paddle.moveLeft();
+   } else if (event.key === 'ArrowRight'){
+      paddle.moveRight();
+   }
+});
+
+// Removed keyup event listener when changed to classes as it would not be necessary
+
+// Add mousemove event listener to the DOM
+document.addEventListener('mousemove', (event) => {
+   // execute paddle move Right or Left based in mouse movement
+   if (event.movementX < 0) {
+      paddle.moveLeft()
+   } else if (event.movementX > 0) {
+      paddle.moveRight()
+   }
+});
+class Ball {                  // class variable for the ball
+   constructor(x, y, radius, dx, dy, color = 'black') {
+      this.x = x;             // x coordinate for ball
+      this.y = y;             // y coordinate for ball
+      this.radius = radius;   // radius of ball
+      this.dx = dx;           // Change in x direction
+      this.dy = dy;           // Change in y direction
+      this.color = color      // color of ball
+      this.isHit = false;     // collision indicator 
+      this.reverseX = false;  // indicates whether the ball changes x direction
+      this.reverseY = false;  // indicates whether the ball changes y direction
+
    }
  
-   draw() {
+   draw() {                // Draw Method for the ball
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = "yellow"; 
+      ctx.fillStyle = this.color; 
       ctx.fill();
       ctx.closePath();
    }
  
-   updateLoc() {
-      if (ball.isHit) {
-      //   ball.dx = -ball.dx;
-         ball.dy = -ball.dy;
-         ball.isHit = false;
-      } else {
-         if((ball.x + ball.radius > canvas.width) || (ball.x - ball.radius<=0 )) {
-            ball.dx = -ball.dx;
-         } 
-         //   if((ball.y + ball.radius > canvas.height) || (ball.y - ball.radius <= 0) || (paddle.isHit() ) )  {
-         if((ball.y - ball.radius <= 0) || (paddle.isHit() ) )  {
-            ball.dy = -ball.dy;
-         }
-         if(ball.y + ball.radius > canvas.height-paddle.height && 
-            !(ball.x + ball.radius > paddle.x && 
-            ball.x - ball.radius < paddle.x + paddle.width && 
-            ball.y + ball.radius > paddle.y &&
-            ball.y - ball.radius < paddle.y + paddle.height)
-         ) {
-            gameOver = true;
-         }
+   updateLoc() {           // Update location of the ball and respond to collisions
+      
+      if((this.x + this.radius >= canvas.width) || (this.x - this.radius<=0 )) { // Wall collision, reverse x direction
+         this.reverseX = true
+         this.isHit = true; 
+      } 
+      
+      if((this.y - this.radius <= 0) || (paddle.isHit() ) )  {    // Roof or Paddle collision, reverse y direction
+         this.reverseY= true
+         this.isHit = true; 
+      }
+      if(this.y + this.radius >= canvas.height-paddle.height &&   // Bottom of the Canvas without paddle collision
+         !(this.x + this.radius >= paddle.x && 
+            this.x - this.radius <= paddle.x + paddle.width && 
+            this.y + this.radius >= paddle.y &&
+            this.y - this.radius <= paddle.y + paddle.height)
+      ) {
+         gameOver = true;                                         // End of game
       }
       
-      this.x += this.dx;
-      this.y += this.dy;
+      if (this.isHit) { // If collision detected, execute hit function to process collision response
+         this.hit()
+      } 
+
+      this.x += this.dx;   // set x position
+      this.y += this.dy;   // set y position
+   }
+
+   hit() {  // If collision detected, execute hit function to process collision response
+      if (this.reverseX) { ball.dx = -ball.dx; this.reverseX=false}  // reverse x position and reset indicators
+      if (this.reverseY) { ball.dy = -ball.dy; this.reverseY=false}  // reverse y position and reset indicators
+      ball.isHit = false;                                            // reset isHit indicator
    }
 }
 
-class Block {
+class Brick {                    // class variable for the bricks
    constructor(x, y, width, height, color) {
-      this.x = x;
-      this.y = y;
-      this.width = width;
-      this.height = height;
-      this.color = color;
-      this.isVisible = true;   
+      this.x = x;                // x coordinate for brick
+      this.y = y;                // y coordinate for brick
+      this.width = width;        // width coordinate
+      this.height = height;      // height coordinate
+      this.color = color;        // color for brick
+      this.isVisible = true;     // Visible state for brick
+      this.points = 10           // Number of points for brick
    }
  
-   draw() {
-      this.isHit()
-      if (this.isVisible) {
+   draw() {                                                          // Draw Method for the brick
+      this.isHit()                                                   // Brick collision detected?
+      if (this.isVisible) {                                          // if visible, Draw the brick
          ctx.fillStyle = this.color;
          ctx.fillRect(this.x, this.y, this.width, this.height);
-         ctx.stokeStyle = "black";
+         ctx.stokeStyle = this.color;
          ctx.strokeRect(this.x, this.y, this.width, this.height);
       }
    }
    
-   isHit() {
-      if(ball.x + ball.radius > this.x && 
-         ball.x - ball.radius < this.x + this.width && 
-         ball.y + ball.radius > this.y &&
-         ball.y - ball.radius < this.y + this.height &&
+   isHit() {                                                   // Collision Method detection for Brick
+      if(ball.x + ball.radius >= this.x &&                     // Collision detection for Visible Brick
+         ball.x - ball.radius <= this.x + this.width && 
+         ball.y + ball.radius >= this.y &&
+         ball.y - ball.radius <= this.y + this.height &&
          this.isVisible
-      ){
-         this.isVisible= false;
-         //add bounce processing here (set bounce)
-         ball.isHit = true;
-         brickCountLeft += -1
-         return true;
+      ){                                                       // Process the collision
+
+         //add future bounce processing here (set bounce per side/direction of collision)
+
+         if ((ball.x + ball.radius <= this.x +3) || (ball.x - ball.radius >= this.x+this.width-3) ) {  // Side collision detection
+            ball.reverseX=true;                                                                        // Reverse ball x position
+         }
+         if ((ball.y + ball.radius <= this.y+3) || (ball.y - ball.radius >= this.y+this.height-3)) {  // Top/Bottom collision detection
+            ball.reverseY=true;                                                                       // Reverse ball y position
+         }         
+         this.isVisible= false;                                      // Remove brick from display
+         ball.isHit = true;                                          // Set ball.isHit flag to true
+         ball.hit();                                                 // process ball.Hit function
+         brickCountLeft += -1 ;                                      // Number of bricks left to display
+         yourScore += this.points                                    // calculate your score
+         document.getElementById("yourScore").innerHTML = yourScore; // Display your score
+         return true;                                                // Return true for collision
       }
-      return false;
+      return false;                 // Return false for collision
    }
 }
 
-class Paddle {
-   constructor(x, y, width, height, speed) {
-      this.x = x;
-      this.y = y;
-      this.width = width;
-      this.height = height;
-      this.speed = speed;
+class Paddle {                      // class variable for the Paddle
+   constructor(x, y, width, height, xMoveDist, color='black') {
+      this.x = x;                   // x coordinate for brick
+      this.y = y;                   // y coordinate for brick
+      this.width = width;           // width coordinate
+      this.height = height;         // height coordinate
+      this.xMoveDist = xMoveDist;   // move distance
+      this.color = color            // color for Paddle
    }
  
-   // Method to move the paddle left
-   moveLeft() {
-      this.x -= this.speed;
-      // Prevent paddle from going off the left edge of the canvas
-      if (this.x < 0) {
+   
+   moveLeft() {                     // Method to move the paddle left
+      this.x -= this.xMoveDist;     // move distance to the left
+      
+      if (this.x < 0) {             // Prevent paddle from going off the left edge of the canvas
          this.x = 0;
       }
    }
  
-   // Method to move the paddle right
-   moveRight() {
-      this.x += this.speed;
-      // Prevent paddle from going off the right edge of the canvas
-      if (this.x + this.width > canvas.width) {
+   
+   moveRight() {                                   // Method to move the paddle right
+      this.x += this.xMoveDist;                    // move distance to the right
+      
+      if (this.x + this.width >= canvas.width) {   // Prevent paddle from going off the right edge of the canvas
          this.x = canvas.width - this.width;
       }
    }
  
-   // Method to draw the paddle on the canvas
-   draw() {
-      ctx.fillStyle = "white"; 
+      draw() {                                     // Method to draw the paddle on the canvas
+
+      ctx.fillStyle = this.color; 
       ctx.fillRect(this.x, this.y, this.width, this.height);
    }
 
-   isHit() {
-      if(ball.x + ball.radius > this.x && 
-         ball.x - ball.radius < this.x + this.width && 
-         ball.y + ball.radius > this.y &&
-         ball.y - ball.radius < this.y + this.height
-      ) {
-         return true;
+   isHit() {                                                // Collision Method detection for paddle
+      if(ball.x + ball.radius >= this.x &&                  // Collision detection for paddle
+         ball.x - ball.radius <= this.x + this.width && 
+         ball.y + ball.radius >= this.y &&
+         ball.y - ball.radius <= this.y + this.height
+      ) {                                                         // Proccess the collision
+         ball.isHit = true;                                       // set collision indicator
+         ball.reverseY = true;                                    // set ball direction
+         if((ball.x + ball.radius <= this.x + .1 * this.width ||  // if ball collides with corner ie. first or last 10 percent of paddle width
+            ball.x - ball.radius >= this.x + .9 * this.width) ) {
+            ball.reverseX = true;                                 // reverse ball direction
+         } 
+         return true;                                             // return true for collision
       }
-      return false;
+      return false;                                               // return false for collision
    }
 }
    
-const ball = new Ball(canvas.width / 2, canvas.height / 2, 15, 3, 3);
-const paddle = new Paddle(canvas.width / 2, canvas.height - 20, 100, 15, 3);
 
-// Colored ball stats: x position, y position, radius, color
-let ball_Radius = 15, ball_xPos = canvas.width / 2, ball_yPos = canvas.height / 2, ballColor="#000000";
+function drawBricks() {                               // Draw the bricks
+   for (let c = 0; c < brickColumns; c++) {           // columns
+      for (let r = 0; r < brickRows; r++) {           // rows
+         bricks[c][r].draw();                         // draw the brick
+      }
+   }
+}
 
-// Paddle stats: x position, y position, height, width, color
-let paddle_xPos = canvas.width / 2, paddle_yPos = canvas.height-20; paddle_height = 15, paddle_width = 100, paddleColor="#000000";
+function handleClick() {                              // Reset button processing
+  window.location.reload();                           // Reload the page
+}
 
-// Balls move distances for x & y, used to move the ball around.
-let ball_xMoveDist = 3, ball_yMoveDist = 3;
+function randomColor() {                           // returns a random color
+   return '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0');
+}
 
-// Paddle move distances, x only as the paddle y position doesnt change  move distance. 
-let paddle_xMoveDist = 3, paddle_moveLeft = false, paddle_moveRight = false;
+const ball = new Ball(canvas.width / 2, canvas.height / 2, 15, 3, 3, 'red');           // define the ball
+const paddle = new Paddle(canvas.width / 2, canvas.height - 15, 100, 15, 3, "blue");   // define the paddle
 
-brickColumns = 6
-brickRows = 4
-brickWidth = 90
-brickHeight = 25
-brickPadding = 10
-brickTopOffset = 40
-brickLeftOffset = 5
-brickCountLeft = brickRows * brickColumns
+brickColumns = 6                                // number of columns
+brickRows = 4                                   // number of rows
+brickWidth = 90                                 // Brick width 
+brickHeight = 25                                // Brick height
+brickPadding = 10                               // Brick padding
+brickTopOffset = 40                             // Brick top offset
+brickLeftOffset = 5                             // Brick left offset
+brickCountLeft = brickRows * brickColumns       // Total brick count
 
-// Create an array of blocks
-let blocks = [];
+// Create an array of bricks
+let bricks = [];
 for (let c = 0; c < brickColumns; c++) {
-   blocks[c] = [];
+   bricks[c] = [];
    for (let r = 0; r < brickRows; r++) {
-      blocks[c][r] = new Block(c * (brickWidth + brickPadding) + brickLeftOffset,
+      bricks[c][r] = new Brick(c * (brickWidth + brickPadding) + brickLeftOffset,
                               r * (brickHeight + brickPadding) + brickTopOffset,
                               brickWidth, brickHeight, randomColor());
    }
 }
 
-// Draw the blocks
-function drawBlocks() {
-   for (let c = 0; c < brickColumns; c++) {
-      for (let r = 0; r < brickRows; r++) {
-         blocks[c][r].draw();
-      }
-   }
-}
-
-// Add keydown event listener to the DOM
-document.addEventListener('keydown', function(event) {
-   // Set moveLeft, moveRight to true when the respective key is down
-   if (event.key === 'ArrowLeft') {
-      paddle_moveLeft = true;
-      paddle.moveLeft();
-   } else if (event.key === 'ArrowRight'){
-      paddle_moveRight = true;
-      paddle.moveRight();
-   }
-});
-
-// Add keydown event listener to the DOM
-document.addEventListener('keyup', function(event) {
-   // Set moveLeft, moveRight to fakse when the respective key is up
-   if (event.key === 'ArrowLeft') {
-      paddle_moveLeft = false;
-   }
-   if (event.key === 'ArrowRight') {
-      paddle_moveRight = false;
-   }
-});
-
-let prevX = 0;
-let prevY = 0;
-
-document.addEventListener('mousemove', (event) => {
-   const x = event.clientX;
-   const y = event.clientY;
-
-   paddle.x = x;
-   paddle.moveRight()
-   prevX = x;
-   prevY = y;
-});
-
-// Draws the ball on the canvas
-ball_Render=()=>{
-
-   ctx.beginPath();
-   //arc creates circular arc starting at 0, ending at 2pi (360 degrees)
-   ctx.arc(ball_xPos, ball_yPos, ball_Radius, 0, Math.PI * 2);
-   //fill in the circular path with color
-   ctx.fillStyle = ballColor
-   ctx.fill();
-   ctx.closePath();
-}
-bounce_ball=()=>{
-   /* Compare ball to boundaries of canvas, if contact is made on borders, 
-    * randomly changes the color of the paddle and the ball.
-    * It also changes the x and y move distance as the borders are hit.
-    */ 
-   if((ball_xPos + ball_Radius >= canvas.width) || (ball_xPos - ball_Radius <=0)){
-      ball_xMoveDist = -ball_xMoveDist;
-      randomColor()
-   }
-   if((ball_yPos + ball_Radius >= canvas.height) || (ball_yPos - ball_Radius <= 0)) {
-      ball_yMoveDist = -ball_yMoveDist;
-      randomColor()
-   }
-
-   // Change the balls x and y position for next rendering.
-   ball_xPos += ball_xMoveDist;
-   ball_yPos += ball_yMoveDist;
-
-
-}
-// Draws the paddle on the canvas
-paddle_Render=()=>{
-   //fill in the paddle with color and draw
-   ctx.fillStyle = paddleColor;
-   ctx.fillRect(paddle_xPos, paddle_yPos, paddle_width, paddle_height);
-}
-
-// Changes the color of each object to random color
-function randomColor() { 
-   ballColor = '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0'); 
-   paddleColor = '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0'); 
-   return '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0');
-}
 
 // Main draw function.
 draw=()=> {
-   if ((brickCountLeft <= 0) || gameOver) {
-      alert("Game Over!\nThank You For Playing!"); 
-      clearInterval(intervalID);
+   if  (gameOver) {                                      // If game over process end of game
+      alert("Game Over!\nThank You For Playing!");       // Display game over
+      clearInterval(intervalID);                         // Clear interval ID for display      
    }
+   else if (brickCountLeft <= 0) {                       // if all bricks are hit - reset Display
+      for (let c = 0; c < brickColumns; c++) {           
+         for (let r = 0; r < brickRows; r++) {           
+            bricks[c][r].isVisible=true;                 // reset visibility
+            brickCountLeft++;                            // reset brick count
+         }
+      }                                            // Reset for next level
+      ball.x=canvas.width / 2, canvas.height / 2   // reset ball position
+      ball.y=ball_yPos = canvas.height / 2         // reset ball position
+      ball.radius -= 2                             // change ball size per level
+      if (ball.dx < 0) ball.dx = -ball.dx;         // reset ball to falling position
+      if (ball.dy < 0) ball.dy = -ball.dy;         // reset ball to falling position
+      ball.dx += 1                                 // add speed to ball per level
+      ball.dy += 1                                 // add speed to ball per level
+      paddle.xMoveDist = ball.dx                   // change paddle speed to match ball
+      yourLevel += 1                               // increase level
+      document.getElementById("yourLevel").innerHTML = yourLevel; // display new level
+   }   
    // Clear drawing canvas
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-   // Temp ball_Render();    // Render Ball
-   ball.draw();
-// Temp paddle_Render();  // Render Paddle
-   paddle.draw();
-   drawBlocks();
-
-
-   ball.updateLoc();
-// Temp bounce_ball();
-
-   /* Compare paddle to boundaries of canvas.
-    * If the paddle is to the left or right it is limited so that it cannot go off screen
-    * In the assignment, xPaddle is supposed to be used in place of paddle_xPos
-    * I am using paddle_xPos to stay consistent with ball_xPos and ball_yPos.
-    */
-//   if(paddle_xPos >= canvas.width - paddle_width) paddle_moveRight = false;
-//   if (paddle_xPos <= 0) paddle_moveLeft = false;
-   
-   // Check if the keypress booleans moveRight & moveLeft are enabled, set move position for the paddle.
-//   if (paddle_moveRight) paddle_xPos += paddle_xMoveDist;
-//   if (paddle_moveLeft) paddle_xPos += -paddle_xMoveDist;
-   
+   ball.draw();         // Render Ball
+   paddle.draw();       // Render Paddle
+   drawBricks();        // Render bricks
+   ball.updateLoc();    // Update ball position
 };
 
 /*
  * setInterval(func, delay)
  * this built-in global JavaScript function executes 'func' function every
- * 'delay' milliseconds, and returns an interval ID. We won't really use intervalID
- * so don't worry to much about that for now.
+ * 'delay' milliseconds, and returns an interval ID.
  *
  * The refreshRate changes the redrawing speed in a reverse correlation, the smaller the number, the faster the redraw. 
  */

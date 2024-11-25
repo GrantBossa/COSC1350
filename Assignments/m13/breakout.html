@@ -7,24 +7,41 @@
   -->
 
 <html lang="en-US">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Breakout Game</title>
-    <link href="breakout.css" rel="stylesheet" type="text/css" />
-  </head>
 
-  <header>
-    <span>
-      <h1>Breakout Game</h1>
-    </span>
-  </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breakout Game</title>
+  <link href="breakout.css" rel="stylesheet" type="text/css" />
+</head>
 
-  <body>
-    <div>
-      <canvas id="myCanvas" width="600" height="400"></canvas>
-    </div>
+<header>
+  <span>
+    <h1>Breakout Game</h1>
+  </span>
+</header>
 
-    <script src="breakout.js"></script>
-  </body>
+<body>
+  
+  <span><h2>Level <var id="yourLevel">1 : </var> Your Score : <var id="yourScore">0</h2></span>
+  
+  <div>
+    <canvas id="myCanvas" width="600" height="400"></canvas>
+  </div>
+  <p></p>
+  <button id="btnReset" type="button">Reset</button>
+  <span>
+    <h2>Instructions :</h2>
+    <p>You earn 10 points per brick removed.</p>
+    <p>Use the left and right arrow keys to move the paddle.</p>
+    <p>Optionally, you can use the mouse over the screen to move left and right.</p>
+    <p>Hints:Remember to keep it on the screen. Move mouse slowly to maximize function processing.</p>
+    <p>The game is over when either all the bricks are removed or you miss the ball with the paddle.</p>
+    <p>Press the reset button to restart a game.</p>
+    
+  
+  </span>
+  <script src="breakout.js"></script>
+</body>
+
 </html>
